@@ -22,6 +22,7 @@ For this example we'll be using a shapefile of lakes on Washington's Olympic Pen
 
     lakes = geopandas.read_file("oly-lakes.shp")
 
+(If you're playing along at home, you can find these data [here]({{site.root}}/assets/geodata/oly-lakes.zip))
 
 >## CRS
 > It's important that you know the coordinate reference system (CRS) that your data is projected in. Many times, data loaded from shapefiles (or other vector formats) have their CRS embedded; loading these data using geopandas will make the CRS available in the `.crs` attribute of the `GeoDataFrame` (e.g. `data.crs`). Geopandas expresses CRSs as EPSG codes.
@@ -48,7 +49,10 @@ Since we're working with vector data here, we'll be using `ax.add_geometries`. T
 
 For our example, we can therefore write:
 
-    ax.add_geometries(lakes.geometry, crs = ccrs.PlateCarree()) # for Lat/Lon data.
+    ax.add_geometries(lakes.geometry, crs = ccrs.PlateCarree(),
+                      edgecolor='blue', zorder = 5) # for Lat/Lon data.
+
+(The arguments `edgecolor` and `zorder` affect how the data are displayed. `edgecolor` changes the color of the edges of the displayed polygons, and `zorder` specifies that the polygons are rendered above other plotted polygons. )
 
 We also want to make sure we can actually see the data. To do this, we can set the extent of the map from the boundaries of the whole GeoDataFrame using `total_bounds`.
 
@@ -60,30 +64,33 @@ All together the code looks like this:
     bounds = lakes.total_bounds
     ax = plt.axes(projection = ccrs.LambertConformal())
     ax.set_extent([bounds[0], bounds[2], bounds[1], bounds[3]])
-    ax.add_geometries(lakes.geometry, crs=ccrs.PlateCarree())
+    ax.add_geometries(lakes.geometry, crs = ccrs.PlateCarree(),
+                      edgecolor='blue', zorder = 5)
 
-![olympic.png]({{site.root}}/assets/img/olympic.png)
+<table align='center'>
+    <tr align='center' style="width: 100%">
+        <td>
+            <img src="{{site.root}}/assets/img/olympic.png" style="width: 100%"/>
+        </td>
+    </tr>
+</table>
+
+
 
 ### 4. Add Context
 
-For example, perhaps we'd like to add the peak of Mt. Olympus (10N 447087.3 5294290.9) to our map:
 
-    ax.scatter(447087.3, 5294290.9, transform = ccrs.UTM(10), color='red')
-    ax.text(447087.3 + 2000, 5294290.9, "Mt. Olympus", transform = ccrs.UTM(10), color='red')
-
-
-**Important Point**: Anything that Matplotlib can do (*for the most part*) can be plotted on cartopy `GeoAxes`. Most matplotlib plotting functions (`text`, `contourf`, etc), require *either* a `crs` argument or a `transform` argument describing the **source projection** of the data. Notice how above we gave the coordinates of Mt. Olympus in UTM 10T; cartopy does the conversion to our projected space for us.
-
-Or, maybe we'd like to add some other borders. This is where the built-in features of Cartopy can help us. We can use `cartopy.feature.NaturalEarthFeature` to download useful features from the [Natural Earth](http://naturalearthdata.com) dataset.
+Maybe we'd like to add some borders, describing where the continent boundaries are. This is where the built-in features of Cartopy can help us. We can use `cartopy.feature.NaturalEarthFeature` to download useful features from the [Natural Earth](http://naturalearthdata.com) dataset.
 
     land = cf.NaturalEarthFeature(
-        category='physical',
-        name='land',
-        scale='10m',
-        facecolor=cf.COLORS['land'],
-        alpha=0.5)
+      category='physical',
+      name='land',
+      scale='10m',
+      facecolor=cf.COLORS['land'],
+      edgecolor='black',
+      alpha=0.5)
 
-This downloads the land dataset at 10m scale (from the physical collection in Natural Earth), colors the polygons using a standard "land" color, and sets the opacity to 0.5. The options for `category`, `name`, and `scale` are often difficult to decipher. If you travel to the Natural Earth dataset of your choice (e.g. 50m-scale countries: https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/) and use your browser to copy the link within the "Download Countries" button (https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip), you can usually find what you're looking for. In this case: `category = cultural`, `name = admin_0_countries`, and `scale = 50m`.
+This downloads the land dataset at 10m scale (from the physical collection in Natural Earth), colors the polygons using a standard "land" color, and sets the opacity to 0.5. The options for `category`, `name`, and `scale` are often difficult to decipher. If you travel to the Natural Earth dataset of your choice (e.g. 50m-scale countries: [https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/)) and use your browser to copy the link within the "Download Countries" button ([https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip](https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip)), you can usually find what you're looking for. In this case: `category = cultural`, `name = admin_0_countries`, and `scale = 50m`.
 
 To add the above `land` to the map, all we need to do is the following:
 
@@ -91,25 +98,90 @@ To add the above `land` to the map, all we need to do is the following:
 
 Here's the full code:
 
-    bounds= park.total_bounds
-    fig = plt.figure(figsize=(8,8))
+    bounds= lakes.total_bounds
+    figure = plt.figure(figsize=(20,20))
     ax = plt.axes(projection = ccrs.LambertConformal())
-    ax.set_extent([bounds[0], bounds[2], bounds[1], bounds[3]])
-    ax.gridlines()
 
-    ax.add_geometries(park.geometry, crs=ccrs.PlateCarree(), facecolor='none', edgecolor='k')
+    ax.set_extent([bounds[0], bounds[2], bounds[1], bounds[3]])
 
     land = cf.NaturalEarthFeature(
         category='physical',
         name='land',
         scale='10m',
         facecolor=cf.COLORS['land'],
+        edgecolor='black',
         alpha=0.5)
+
+    ax.add_geometries(lakes.geometry, crs=ccrs.PlateCarree(), zorder=5, edgecolor='blue')
+
     ax.add_feature(land)
 
-    ax.scatter(447087.3, 5294290.9, transform = ccrs.UTM(10), color='red')
-    ax.text(447087.3 + 2000, 5294290.9, "Mt. Olympus", transform = ccrs.UTM(10), color='red')
+    ax.gridlines()
 
-![oly-ad](/assets/img/olympic-addl.png)
+<table align='center'>
+    <tr align='center' style="width: 100%">
+        <td>
+            <img src="{{site.root}}/assets/img/olympic-land.png" style="width: 100%"/>
+        </td>
+    </tr>
+</table>
+
+### Some "GIS"
+
+Let's say we want to know, and highlight on the map, the largest lake on the Olympic Peninsula. With Geopandas and Cartopy, it's simple. First, we sort the data by the "AREASQKM" column (you could also use the `lakes.geometry.area` function to compute areas for each geometry), and select the top record.
+
+    biglake = lakes.sort_values(by="AREASQKM", ascending=False).head(1)
+
+Then, we plot the geometry component of `biglake` with no fill and a thicker red border, using a larger `zorder` to ensure the new polygon is on top and visible.
+
+    ax.add_geometries(biglake.geometry, crs=ccrs.PlateCarree(), edgecolor = 'red', facecolor = 'none', linewidth = 2, zorder = 20)
+
+We could even place a label on the map via Matplotlib's `text` function, using the centroid of the `biglake` geometry to locate the label (with a 0.05 degree offset for legibility), and the text label from the `GNIS_NAME` field of the record.
+
+    ax.text(biglake.centroid.x + 0.05, biglake.centroid.y, biglake.GNIS_NAME.values[0], transform=ccrs.PlateCarree(), fontsize=15)
+
+All together, the code looks like this:
+
+    bounds= lakes.total_bounds
+    figure = plt.figure(figsize=(20,20))
+    ax = plt.axes(projection = ccrs.LambertConformal())
+
+    ax.set_extent([bounds[0], bounds[2], bounds[1], bounds[3]])
+
+    roads = cf.NaturalEarthFeature(
+        category='physical',
+        name='land',
+        scale='10m',
+        facecolor=cf.COLORS['land'],
+        edgecolor='black',
+        alpha=0.5)
+
+    ax.add_geometries(lakes.geometry, crs=ccrs.PlateCarree(), zorder=5, edgecolor='blue')
+
+
+    # Label Largest Lake
+    biglake = lakes.sort_values(by="AREASQKM", ascending=False).head(1)
+    ax.add_geometries(biglake.geometry, crs=ccrs.PlateCarree(), edgecolor='red', facecolor='none', linewidth=2, zorder =20)
+    ax.text(biglake.centroid.x + 0.05, biglake.centroid.y, biglake.GNIS_NAME.values[0], transform=ccrs.PlateCarree(), fontsize=15)
+
+    ax.add_feature(roads)
+
+    ax.gridlines()
+
+
+<table align='center'>
+    <tr align='center' style="width: 100%">
+        <td>
+            <img src="{{site.root}}/assets/img/olympic-largest.png" style="width: 100%"/>
+        </td>
+    </tr>
+</table>
+
+We can see that we've highlighted "Ozette Lake" as the largest lake on the Peninsula.
+
+
+
+**Important Point**: Anything that Matplotlib can do (*for the most part*) can be plotted on cartopy `GeoAxes`. Most matplotlib plotting functions (`text`, `contourf`, etc), require *either* a `crs` argument or a `transform` argument describing the **source projection** of the data. Notice how above we gave the coordinates of Mt. Olympus in UTM 10T; cartopy does the conversion to our projected space for us.
+
 
 Matplotlib and cartopy represent a robust pairing of data visualization tools for creating impressive, customizable static maps. Next we'll move onto a quick tutorial to create moveable, interactive maps with your own data.
