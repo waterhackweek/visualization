@@ -1,8 +1,8 @@
 ---
-title: "Interactive Maps"
+title: "<small>(optional)</small> Interactive Maps"
 teaching: 15
 exercises: 0
-questions: 
+questions:
     - "How do I create a map I can interact with using Python?"
     - "What packages are available for this?"
 objectives:
@@ -18,6 +18,6 @@ There are myriad ways to approach this challenge. Hard-core web developers can r
 
 That's the intent of the Python package [folium](https://github.com/python-visualization/folium): to combine data objects in Python with a web mapping framework known as Leaflet to produce interactive geospatial data products on the web.
 
-**Note**: at this point, there are several packages which claim to accomplish what Folium does. Packages like [`mapbox-gl-jupyter`](https://github.com/mapbox/mapboxgl-jupyter) and [`Holoviews/Geoviews`](http://geoviews.org/) can accomplish much of Folium's core functionality, but have strengths and weaknesses of their own. Folium is a great way to learn these frameworks, but if you have a specific plotting need, know that there are several very powerful options out there which may better suit your needs. 
+**Note**: at this point, there are several packages which claim to accomplish what Folium does. Packages like [`mapbox-gl-jupyter`](https://github.com/mapbox/mapboxgl-jupyter) and [`Holoviews/Geoviews`](http://geoviews.org/) can accomplish much of Folium's core functionality, but have strengths and weaknesses of their own. Folium is a great way to learn these frameworks, but if you have a specific plotting need, know that there are several very powerful options out there which may better suit your needs.
 
-This tutorial lives in its entirety [here](https://github.com/geohackweek/tutorial_contents/tree/master/visualization/notebooks), in a notebook called `foliumTutorial`. 
+This tutorial lives in its entirety [here](https://github.com/geohackweek/tutorial_contents/tree/master/visualization/notebooks), in a notebook called `foliumTutorial`.

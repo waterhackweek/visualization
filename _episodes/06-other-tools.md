@@ -1,10 +1,10 @@
 ---
-title: "Other Powerful Plotting Tools"
+title: "<small>(optional)</small> Other Powerful Plotting Tools"
 teaching: 10
 exercises: 0
 questions:
 - "What other geospatial visualization tools should I know about?"
-objectives: 
+objectives:
 - "See how Tableau, GeoViews, and other tools can be used in a data workflow."
 ---
 
@@ -21,4 +21,4 @@ var divElement = document.getElementById('viz1536789373846');                   
 
 ### Holoviews + Geoviews + Datashader
 
-Dealing with a *huge* quantity of geospatial data, and want an interactive visualization? [Holoviews](http://holoviews.org/) is a very powerful data-aware Python visualization library, and has a geospatial component called [GeoViews](http://geoviews.org). They have a great set of tutorials, including one about creating fast, easy to use maps with [huge numbers of data points](http://pyviz.org/tutorial/10_Working_with_Large_Datasets.html). 
+Dealing with a *huge* quantity of geospatial data, and want an interactive visualization? [Holoviews](http://holoviews.org/) is a very powerful data-aware Python visualization library, and has a geospatial component called [GeoViews](http://geoviews.org). They have a great set of tutorials, including one about creating fast, easy to use maps with [huge numbers of data points](http://pyviz.org/tutorial/10_Working_with_Large_Datasets.html).
