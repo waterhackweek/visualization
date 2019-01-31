@@ -16,7 +16,7 @@ The moment you've likely been waiting for: plotting *your* data on a map using c
 
 ### 1. Load It.
 
-It's likely that your geospatial information will be loaded into Python using a library like Geopandas or similar. The only requirement that cartopy has for plotting spatial (vector) data is that it's loaded into a Shapely geometry class (e.g. `shapely.geometry.Polygon` or `shapely.geometry.Point` --- these were covered in the Vector tutorial, so we won't go into detail here).
+It's likely that your geospatial information will be loaded into Python using a library like Geopandas or similar. The only requirement that cartopy has for plotting spatial (vector) data is that it's loaded into a Shapely geometry class (e.g. `shapely.geometry.Polygon` or `shapely.geometry.Point` --- these were covered in the [GeoHackWeek Vector tutorial](https://geohackweek.github.io/vector/), so we won't go into detail here).
 
 For this example we'll be using a shapefile of lakes on Washington's Olympic Peninsula from the [National Hydrography Dataset](https://www.usgs.gov/core-science-systems/ngp/national-hydrography) <small>(sourced from the NHD_Waterbody data)</small>.
 
